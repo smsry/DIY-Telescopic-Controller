@@ -1,8 +1,7 @@
- 
 #include <XInput.h>
+#define MAX8BUTTONS
+#include <MobaTools.h>
 
- 
- 
 const boolean UseLeftJoystick   = true;   
 const boolean InvertLeftYAxis   = false;  
 
@@ -36,7 +35,12 @@ const int Pin_DpadUp    = 2;
 const int Pin_DpadDown  = 3;
 const int Pin_DpadLeft  = 4;
 const int Pin_DpadRight = 5;
- 
+
+const byte buttonPin [] = { 15, 16, 14, 10 };
+const byte buttonCnt = sizeof(buttonPin);
+
+MoToButtons Buttons( buttonPin, buttonCnt, 30, 500, 400);
+
 void setup() {
   if (UseTriggerButtons == true) {
     pinMode(Pin_TriggerL, INPUT_PULLUP);
@@ -46,7 +50,6 @@ void setup() {
   else {
     XInput.setTriggerRange(0, ADC_Max);
   }
-
  
   pinMode(Pin_ButtonA, INPUT_PULLUP);
   pinMode(Pin_ButtonB, INPUT_PULLUP);
@@ -71,8 +74,9 @@ void setup() {
 }
 
 void loop() {
-
  
+  Buttons.processButtons();
+
  
   boolean buttonA = !digitalRead(Pin_ButtonA);
   boolean buttonB = !digitalRead(Pin_ButtonB);
